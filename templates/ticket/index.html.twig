@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des tickets{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📋 Liste des tickets</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_admin_index') }}" class="btn btn-outline-secondary">
+            ⚙️ Administration
+        </a>
+    {% endif %}
+</div>
+
+{% if tickets is empty %}
+    <div class="alert alert-info">
+        <h4>Aucun ticket</h4>
+        <p>Il n'y a actuellement aucun ticket dans le système.</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Créer un ticket</a>
+    </div>
+{% else %}
+    <div class="row">
+        {% for ticket in tickets %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <small class="text-muted">#{{ ticket.id }}</small>
+                        <span class="badge {% if ticket.statut.nom == 'Nouveau' %}bg-primary{% elseif ticket.statut.nom == 'Ouvert' %}bg-warning{% elseif ticket.statut.nom == 'Résolu' %}bg-info{% else %}bg-success{% endif %}">
+                            {{ ticket.statut.nom }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            {% if ticket.categorie.nom == 'Incident' %}🚨
+                            {% elseif ticket.categorie.nom == 'Panne' %}⚠️
+                            {% elseif ticket.categorie.nom == 'Évolution' %}✨
+                            {% elseif ticket.categorie.nom == 'Anomalie' %}🐛
+                            {% else %}❓
+                            {% endif %}
+                            {{ ticket.categorie.nom }}
+                        </h6>
+                        <p class="card-text">{{ ticket.description|length > 100 ? ticket.description|slice(0, 100) ~ '...' : ticket.description }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Par {{ ticket.auteur }}<br>
+                                Le {{ ticket.dateOuverture|date('d/m/Y à H:i') }}
+                                {% if ticket.responsable %}
+                                    <br>Assigné à {{ ticket.responsable }}
+                                {% endif %}
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ path('app_ticket_show', {id: ticket.id}) }}" class="btn btn-outline-primary btn-sm">
+                            👁️ Voir détails
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_ticket_edit', {id: ticket.id}) }}" class="btn btn-outline-secondary btn-sm">
+                                ✏️ Modifier
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}l.twig' %}
+
+{% block title %}Hello TicketController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code>/Users/bixentegoyheneche/projet-symfony/ticket-manager/src/Controller/TicketController.php</code></li>
+        <li>Your template at <code>/Users/bixentegoyheneche/projet-symfony/ticket-manager/templates/ticket/index.html.twig</code></li>
+    </ul>
+</div>
+{% endblock %}

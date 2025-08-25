@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le ticket #{{ ticket.id }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>✏️ Modifier le ticket #{{ ticket.id }}</h1>
+    <a href="{{ path('app_ticket_show', {id: ticket.id}) }}" class="btn btn-outline-secondary">
+        ← Annuler
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Modification du ticket</h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+                    <div class="col-md-6">
+                        {{ form_row(form.auteur) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.categorie) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.statut) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.responsable) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.dateOuverture) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.dateCloture) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.description) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.submit) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">📊 Informations actuelles</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Statut actuel :</strong> 
+                    <span class="badge {% if ticket.statut.nom == 'Nouveau' %}bg-primary{% elseif ticket.statut.nom == 'Ouvert' %}bg-warning{% elseif ticket.statut.nom == 'Résolu' %}bg-info{% else %}bg-success{% endif %}">
+                        {{ ticket.statut.nom }}
+                    </span>
+                </p>
+                <p><strong>Créé le :</strong> {{ ticket.dateOuverture|date('d/m/Y à H:i') }}</p>
+                {% if ticket.dateCloture %}
+                    <p><strong>Fermé le :</strong> {{ ticket.dateCloture|date('d/m/Y à H:i') }}</p>
+                {% endif %}
+                {% if ticket.responsable %}
+                    <p><strong>Responsable :</strong> {{ ticket.responsable }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">💡 Conseils</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li>• Assignez un responsable pour un suivi optimal</li>
+                    <li>• Changez le statut selon l'avancement</li>
+                    <li>• La date de clôture se remplit automatiquement</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

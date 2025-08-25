@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket #{{ ticket.id }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🎫 Ticket #{{ ticket.id }}</h1>
+    <div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_ticket_edit', {id: ticket.id}) }}" class="btn btn-outline-primary">
+                ✏️ Modifier
+            </a>
+        {% endif %}
+        <a href="{{ path('app_ticket_index') }}" class="btn btn-outline-secondary">
+            ← Retour à la liste
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Détails du ticket</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Catégorie :</strong></div>
+                    <div class="col-sm-9">
+                        <span class="badge bg-secondary">
+                            {% if ticket.categorie.nom == 'Incident' %}🚨
+                            {% elseif ticket.categorie.nom == 'Panne' %}⚠️
+                            {% elseif ticket.categorie.nom == 'Évolution' %}✨
+                            {% elseif ticket.categorie.nom == 'Anomalie' %}🐛
+                            {% else %}❓
+                            {% endif %}
+                            {{ ticket.categorie.nom }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Statut :</strong></div>
+                    <div class="col-sm-9">
+                        <span class="badge {% if ticket.statut.nom == 'Nouveau' %}bg-primary{% elseif ticket.statut.nom == 'Ouvert' %}bg-warning{% elseif ticket.statut.nom == 'Résolu' %}bg-info{% else %}bg-success{% endif %}">
+                            {{ ticket.statut.nom }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Auteur :</strong></div>
+                    <div class="col-sm-9">{{ ticket.auteur }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Date d'ouverture :</strong></div>
+                    <div class="col-sm-9">{{ ticket.dateOuverture|date('d/m/Y à H:i') }}</div>
+                </div>
+
+                {% if ticket.dateCloture %}
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Date de clôture :</strong></div>
+                    <div class="col-sm-9">{{ ticket.dateCloture|date('d/m/Y à H:i') }}</div>
+                </div>
+                {% endif %}
+
+                {% if ticket.responsable %}
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>Responsable :</strong></div>
+                    <div class="col-sm-9">{{ ticket.responsable }}</div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-sm-3"><strong>Description :</strong></div>
+                    <div class="col-sm-9">
+                        <div class="bg-light p-3 rounded">
+                            {{ ticket.description|nl2br }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        {% if is_granted('ROLE_USER') and not ticket.isFerme %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">🔄 Changer le statut</h6>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ path('app_ticket_change_status', {id: ticket.id}) }}">
+                    <div class="mb-3">
+                        <select name="statut_id" class="form-select" required>
+                            <option value="">Choisir un statut</option>
+                            {% for statut in ticket.categorie.nom != 'Fermé' ? ['Nouveau', 'Ouvert', 'Résolu', 'Fermé'] : [] %}
+                                {% if statut != ticket.statut.nom %}
+                                    <option value="{{ statut }}">{{ statut }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">ℹ️ Informations</h6>
+            </div>
+            <div class="card-body">
+                {% if ticket.categorie.description %}
+                    <p><strong>{{ ticket.categorie.nom }} :</strong><br>
+                    <small>{{ ticket.categorie.description }}</small></p>
+                {% endif %}
+                
+                {% if ticket.statut.description %}
+                    <p><strong>Statut {{ ticket.statut.nom }} :</strong><br>
+                    <small>{{ ticket.statut.description }}</small></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

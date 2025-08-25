@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Gestion de Tickets{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">🎫 Créer un nouveau ticket</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">Vous rencontrez un problème ? Décrivez-le nous et nous vous aiderons dans les plus brefs délais.</p>
+                
+                {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+                    <div class="col-md-6">
+                        {{ form_row(form.auteur) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.categorie) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.description) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.submit) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">ℹ️ Informations</h5>
+            </div>
+            <div class="card-body">
+                <h6>Types de tickets :</h6>
+                <ul class="list-unstyled">
+                    <li><strong>🚨 Incident :</strong> Problème imprévu</li>
+                    <li><strong>⚠️ Panne :</strong> Arrêt de service</li>
+                    <li><strong>✨ Évolution :</strong> Nouvelle fonctionnalité</li>
+                    <li><strong>🐛 Anomalie :</strong> Comportement incorrect</li>
+                    <li><strong>❓ Information :</strong> Demande de renseignement</li>
+                </ul>
+            </div>
+        </div>
+        
+        {% if not is_granted('ROLE_USER') %}
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">👥 Personnel de l'agence</h5>
+            </div>
+            <div class="card-body">
+                <p>Connectez-vous pour accéder à la gestion des tickets et aux outils d'administration.</p>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Se connecter</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if is_granted('ROLE_USER') %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="text-center">
+            <a href="{{ path('app_ticket_index') }}" class="btn btn-outline-primary btn-lg">
+                📋 Voir tous les tickets
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_index') }}" class="btn btn-outline-secondary btn-lg ms-3">
+                    ⚙️ Administration
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}l.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code>/Users/bixentegoyheneche/projet-symfony/ticket-manager/src/Controller/HomeController.php</code></li>
+        <li>Your template at <code>/Users/bixentegoyheneche/projet-symfony/ticket-manager/templates/home/index.html.twig</code></li>
+    </ul>
+</div>
+{% endblock %}
