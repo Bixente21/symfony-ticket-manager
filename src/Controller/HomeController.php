@@ -33,7 +33,9 @@ final class HomeController extends AbstractController
             $entityManager->persist($ticket);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Votre ticket a été créé avec succès ! Vous recevrez une réponse dans les plus brefs délais.');
+            // Générer un message avec le numéro de ticket
+            $numeroTicket = 'TCK-' . str_pad($ticket->getId(), 6, '0', STR_PAD_LEFT);
+            $this->addFlash('success', "✅ Votre ticket #{$numeroTicket} a été créé avec succès ! Vous recevrez une réponse dans les plus brefs délais à l'adresse : {$ticket->getAuteur()}");
 
             return $this->redirectToRoute('app_home');
         }

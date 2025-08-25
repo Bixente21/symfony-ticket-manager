@@ -1,0 +1,34 @@
+=====================================
+LIVRABLE - SYSTÈME DE GESTION DE TICKETS
+=====================================
+
+📅 Date : 25 août 2025
+
+🔗 DÉPÔT GITHUB
+=====================================
+https://github.com/Bixente21/symfony-ticket-manager
+
+👨‍💼 COMPTE ADMINISTRATEUR
+=====================================
+Email : admin@agence.com
+Mot de passe : admin123
+
+� ACCÈS APPLICATION
+=====================================
+URL locale : http://127.0.0.1:8000
+
+� DONNÉES DE TEST
+=====================================
+- 10 tickets d'exemple avec différents statuts
+- 5 catégories prédéfinies
+- 3 utilisateurs (1 admin + 2 personnel)
+- Base SQLite avec fixtures incluses
+
+✅ FONCTIONNALITÉS RÉALISÉES
+=====================================
+- Interface publique de création de tickets
+- Authentification sécurisée avec rôles
+- Gestion complète des tickets (CRUD)
+- Interface d'administration
+- Gestion des catégories et statuts
+- Design responsive Bootstrap 5
