@@ -2,22 +2,55 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Gestion de Tickets - Agence{% endblock %}</title>
+        <title>{% block title %}Support Client - Agence{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🎫</text></svg>">
         
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
         {% block stylesheets %}
+        <style>
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            }
+            .card {
+                border-radius: 15px;
+                transition: transform 0.2s ease-in-out;
+            }
+            .card:hover {
+                transform: translateY(-2px);
+            }
+            .btn {
+                border-radius: 10px;
+                font-weight: 500;
+            }
+            .form-control, .form-select {
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
+                transition: border-color 0.3s ease;
+            }
+            .form-control:focus, .form-select:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            }
+            .navbar-brand {
+                font-weight: 600;
+                font-size: 1.3rem;
+            }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <body class="bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('app_home') }}">
-                    🎫 Tickets Agence
+                    <i class="fas fa-headset me-2"></i>
+                    Support Agence
                 </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -27,24 +60,43 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                            <a class="nav-link" href="{{ path('app_home') }}">
+                                <i class="fas fa-home me-1"></i>
+                                Accueil
+                            </a>
                         </li>
                         {% if is_granted('ROLE_USER') %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_ticket_index') }}">Tickets</a>
+                                <a class="nav-link" href="{{ path('app_ticket_index') }}">
+                                    <i class="fas fa-ticket-alt me-1"></i>
+                                    Tickets
+                                </a>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-cog me-1"></i>
                                     Administration
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ path('app_admin_index') }}">Tableau de bord</a></li>
+                                <ul class="dropdown-menu shadow">
+                                    <li><a class="dropdown-item" href="{{ path('app_admin_index') }}">
+                                        <i class="fas fa-tachometer-alt me-2"></i>
+                                        Tableau de bord
+                                    </a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ path('app_admin_categories') }}">Catégories</a></li>
-                                    <li><a class="dropdown-item" href="{{ path('app_admin_statuts') }}">Statuts</a></li>
-                                    <li><a class="dropdown-item" href="{{ path('app_admin_users') }}">Utilisateurs</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_admin_categories') }}">
+                                        <i class="fas fa-tags me-2"></i>
+                                        Catégories
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_admin_statuts') }}">
+                                        <i class="fas fa-flag me-2"></i>
+                                        Statuts
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_admin_users') }}">
+                                        <i class="fas fa-users me-2"></i>
+                                        Utilisateurs
+                                    </a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -54,15 +106,22 @@
                         {% if is_granted('ROLE_USER') %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                    Bonjour {{ app.user.prenom }}
+                                    <i class="fas fa-user-circle me-1"></i>
+                                    {{ app.user.prenom }}
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+                                <ul class="dropdown-menu shadow">
+                                    <li><a class="dropdown-item" href="{{ path('app_logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        Se déconnecter
+                                    </a></li>
                                 </ul>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                                <a class="nav-link" href="{{ path('app_login') }}">
+                                    <i class="fas fa-sign-in-alt me-1"></i>
+                                    Se connecter
+                                </a>
                             </li>
                         {% endif %}
                     </ul>
@@ -70,22 +129,35 @@
             </div>
         </nav>
 
-        <main class="container mt-4">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+        <main>
+            <div class="container">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show mt-3 shadow-sm" role="alert">
+                            <i class="fas fa-{{ label == 'success' ? 'check-circle' : (label == 'error' ? 'exclamation-triangle' : 'info-circle') }} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
+            </div>
 
             {% block body %}{% endblock %}
         </main>
 
-        <footer class="bg-light mt-5 py-4">
+        <footer class="bg-dark text-white py-4 mt-auto">
             <div class="container text-center">
-                <p class="text-muted mb-0">© {{ 'now'|date('Y') }} Agence Web - Gestion de Tickets</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-1">© 2025 Support Agence. Tous droits réservés.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1">
+                            <i class="fas fa-envelope me-2"></i>
+                            support@agence.com
+                        </p>
+                    </div>
+                </div>
             </div>
         </footer>
     </body>

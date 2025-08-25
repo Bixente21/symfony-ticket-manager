@@ -136,17 +136,17 @@ class AppFixtures extends Fixture
             $ticket->setCategorie($categorieEntities[$ticketData['categorie']]);
             $ticket->setStatut($statutEntities[$ticketData['statut']]);
             $ticket->setResponsable($userEntities[$ticketData['responsable']]);
-            
+
             // Ajuster les dates pour certains tickets
             if ($index >= 2) {
                 $ticket->setDateOuverture(new \DateTime('-' . ($index + 1) . ' days'));
             }
-            
+
             // Fermer les tickets avec statut "Fermé"
             if ($ticketData['statut'] === 3) {
                 $ticket->fermer();
             }
-            
+
             $manager->persist($ticket);
         }
 

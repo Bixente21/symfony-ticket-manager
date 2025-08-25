@@ -18,33 +18,33 @@ class TicketType extends AbstractType
     {
         $builder
             ->add('auteur', EmailType::class, [
-                'label' => 'Votre adresse email',
+                'label' => false, // On gère le label dans le template
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'exemple@email.com'
+                    'placeholder' => 'votre.email@exemple.com'
                 ]
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description du problème',
+                'label' => false, // On gère le label dans le template
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 6,
-                    'placeholder' => 'Décrivez votre problème en détail (entre 20 et 250 caractères)...'
+                    'placeholder' => 'Décrivez votre problème ou votre demande en détail. Plus vous êtes précis, plus nous pourrons vous aider efficacement...'
                 ]
             ])
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
-                'label' => 'Catégorie',
-                'placeholder' => 'Choisissez une catégorie',
+                'label' => false, // On gère le label dans le template
+                'placeholder' => '-- Sélectionnez le type de demande --',
                 'attr' => [
                     'class' => 'form-select'
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Créer le ticket',
+                'label' => 'Envoyer ma demande',
                 'attr' => [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-primary btn-lg'
                 ]
             ])
         ;
