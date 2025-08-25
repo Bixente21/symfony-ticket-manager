@@ -58,10 +58,10 @@ final class TicketController extends AbstractController
     #[Route('/{id}/change-status', name: 'app_ticket_change_status', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function changeStatus(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
-        $statutId = $request->request->get('statut_id');
+        $statutNom = $request->request->get('statut_id');
         
-        if ($statutId) {
-            $statut = $entityManager->getRepository('App:Statut')->find($statutId);
+        if ($statutNom) {
+            $statut = $entityManager->getRepository('App\Entity\Statut')->findOneByName($statutNom);
             if ($statut) {
                 $ticket->setStatut($statut);
                 

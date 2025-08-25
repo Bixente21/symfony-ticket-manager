@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des statuts{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📋 Gestion des statuts</h1>
+    <div>
+        <a href="{{ path('app_admin_statuts_new') }}" class="btn btn-success">
+            ➕ Nouveau statut
+        </a>
+        <a href="{{ path('app_admin_index') }}" class="btn btn-outline-secondary">
+            ← Retour au tableau de bord
+        </a>
+    </div>
+</div>
+
+{% if statuts is empty %}
+    <div class="alert alert-info">
+        <h4>Aucun statut</h4>
+        <p>Il n'y a actuellement aucun statut dans le système.</p>
+        <a href="{{ path('app_admin_statuts_new') }}" class="btn btn-primary">Créer le premier statut</a>
+    </div>
+{% else %}
+    <div class="row">
+        {% for statut in statuts %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">
+                            <span class="badge {% if statut.nom == 'Nouveau' %}bg-primary{% elseif statut.nom == 'Ouvert' %}bg-warning{% elseif statut.nom == 'Résolu' %}bg-info{% else %}bg-success{% endif %}">
+                                {{ statut.nom }}
+                            </span>
+                        </h6>
+                        <span class="badge bg-secondary">{{ statut.tickets|length }} ticket(s)</span>
+                    </div>
+                    <div class="card-body">
+                        {% if statut.description %}
+                            <p class="card-text">{{ statut.description }}</p>
+                        {% else %}
+                            <p class="card-text text-muted">Aucune description</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ path('app_admin_statuts_edit', {id: statut.id}) }}" class="btn btn-outline-primary btn-sm">
+                            ✏️ Modifier
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

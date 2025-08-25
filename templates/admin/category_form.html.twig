@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ isEdit ? 'Modifier' : 'Créer' }} une catégorie{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🏷️ {{ isEdit ? 'Modifier' : 'Créer' }} une catégorie</h1>
+    <a href="{{ path('app_admin_categories') }}" class="btn btn-outline-secondary">
+        ← Retour à la liste
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">{{ isEdit ? 'Modification' : 'Création' }} de catégorie</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom de la catégorie *</label>
+                        <input type="text" name="nom" id="nom" class="form-control" 
+                               value="{{ categorie.nom }}" required maxlength="100"
+                               placeholder="Ex: Incident, Panne, Évolution...">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"
+                                  placeholder="Description de la catégorie (optionnel)">{{ categorie.description }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-{{ isEdit ? 'success' : 'primary' }}">
+                            {{ isEdit ? '💾 Enregistrer les modifications' : '➕ Créer la catégorie' }}
+                        </button>
+                        <a href="{{ path('app_admin_categories') }}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">💡 Conseils</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li>• Choisissez un nom clair et explicite</li>
+                    <li>• La description aide les utilisateurs à comprendre</li>
+                    <li>• Les catégories organisent les tickets</li>
+                    {% if isEdit %}
+                        <li>• Cette catégorie est utilisée par {{ categorie.tickets|length }} ticket(s)</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        {% if isEdit and categorie.tickets|length > 0 %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">📊 Tickets liés</h6>
+            </div>
+            <div class="card-body">
+                <p class="small">Cette catégorie est utilisée par <strong>{{ categorie.tickets|length }}</strong> ticket(s).</p>
+                <p class="small text-muted">Modifier cette catégorie affectera tous les tickets associés.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

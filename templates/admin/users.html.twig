@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>👥 Gestion des utilisateurs</h1>
+    <a href="{{ path('app_admin_index') }}" class="btn btn-outline-secondary">
+        ← Retour au tableau de bord
+    </a>
+</div>
+
+{% if users is empty %}
+    <div class="alert alert-info">
+        <h4>Aucun utilisateur</h4>
+        <p>Il n'y a actuellement aucun utilisateur dans le système.</p>
+    </div>
+{% else %}
+    <div class="row">
+        {% for user in users %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">{{ user.prenom }} {{ user.nom }}</h6>
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            <span class="badge bg-danger">Administrateur</span>
+                        {% else %}
+                            <span class="badge bg-primary">Personnel</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>Email :</strong> {{ user.email }}<br>
+                            <strong>Rôles :</strong> 
+                            {% for role in user.roles %}
+                                <span class="badge bg-secondary">{{ role }}</span>
+                            {% endfor %}
+                        </p>
+                        
+                        {% if user.tickets|length > 0 %}
+                            <p class="card-text">
+                                <strong>Tickets assignés :</strong> 
+                                <span class="badge bg-info">{{ user.tickets|length }}</span>
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Membre de l'équipe
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">📊 Statistiques des utilisateurs</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h4>{{ users|length }}</h4>
+                            <p class="text-muted">Total utilisateurs</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>{{ users|filter(u => 'ROLE_ADMIN' in u.roles)|length }}</h4>
+                            <p class="text-muted">Administrateurs</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>{{ users|filter(u => 'ROLE_ADMIN' not in u.roles)|length }}</h4>
+                            <p class="text-muted">Personnel</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>{{ users|filter(u => u.tickets|length > 0)|length }}</h4>
+                            <p class="text-muted">Avec tickets assignés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ isEdit ? 'Modifier' : 'Créer' }} un statut{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📋 {{ isEdit ? 'Modifier' : 'Créer' }} un statut</h1>
+    <a href="{{ path('app_admin_statuts') }}" class="btn btn-outline-secondary">
+        ← Retour à la liste
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">{{ isEdit ? 'Modification' : 'Création' }} de statut</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom du statut *</label>
+                        <input type="text" name="nom" id="nom" class="form-control" 
+                               value="{{ statut.nom }}" required maxlength="100"
+                               placeholder="Ex: Nouveau, Ouvert, Résolu, Fermé...">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"
+                                  placeholder="Description du statut (optionnel)">{{ statut.description }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-{{ isEdit ? 'success' : 'primary' }}">
+                            {{ isEdit ? '💾 Enregistrer les modifications' : '➕ Créer le statut' }}
+                        </button>
+                        <a href="{{ path('app_admin_statuts') }}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">💡 Conseils</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li>• Choisissez un nom clair pour le workflow</li>
+                    <li>• La description explique l'état du ticket</li>
+                    <li>• Les statuts guident le traitement</li>
+                    {% if isEdit %}
+                        <li>• Ce statut est utilisé par {{ statut.tickets|length }} ticket(s)</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">🔄 Statuts recommandés</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li><span class="badge bg-primary">Nouveau</span> - Ticket créé</li>
+                    <li><span class="badge bg-warning">Ouvert</span> - En traitement</li>
+                    <li><span class="badge bg-info">Résolu</span> - Solution trouvée</li>
+                    <li><span class="badge bg-success">Fermé</span> - Terminé</li>
+                </ul>
+            </div>
+        </div>
+        
+        {% if isEdit and statut.tickets|length > 0 %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">📊 Tickets liés</h6>
+            </div>
+            <div class="card-body">
+                <p class="small">Ce statut est utilisé par <strong>{{ statut.tickets|length }}</strong> ticket(s).</p>
+                <p class="small text-muted">Modifier ce statut affectera tous les tickets associés.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -95,11 +95,10 @@
                     <div class="mb-3">
                         <select name="statut_id" class="form-select" required>
                             <option value="">Choisir un statut</option>
-                            {% for statut in ticket.categorie.nom != 'Fermé' ? ['Nouveau', 'Ouvert', 'Résolu', 'Fermé'] : [] %}
-                                {% if statut != ticket.statut.nom %}
-                                    <option value="{{ statut }}">{{ statut }}</option>
-                                {% endif %}
-                            {% endfor %}
+                            <option value="Nouveau" {% if ticket.statut.nom == 'Nouveau' %}disabled{% endif %}>Nouveau</option>
+                            <option value="Ouvert" {% if ticket.statut.nom == 'Ouvert' %}disabled{% endif %}>Ouvert</option>
+                            <option value="Résolu" {% if ticket.statut.nom == 'Résolu' %}disabled{% endif %}>Résolu</option>
+                            <option value="Fermé" {% if ticket.statut.nom == 'Fermé' %}disabled{% endif %}>Fermé</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>

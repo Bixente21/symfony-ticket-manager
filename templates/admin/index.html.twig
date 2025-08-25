@@ -1,5 +1,145 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Administration - Tableau de bord{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>⚙️ Administration</h1>
+    <a href="{{ path('app_ticket_index') }}" class="btn btn-outline-primary">
+        📋 Voir tous les tickets
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center bg-primary text-white">
+            <div class="card-body">
+                <h2 class="card-title">{{ stats.totalTickets }}</h2>
+                <p class="card-text">Total des tickets</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-warning text-dark">
+            <div class="card-body">
+                <h2 class="card-title">{{ stats.openTickets }}</h2>
+                <p class="card-text">Tickets ouverts</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-success text-white">
+            <div class="card-body">
+                <h2 class="card-title">{{ stats.totalTickets - stats.openTickets }}</h2>
+                <p class="card-text">Tickets fermés</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-info text-white">
+            <div class="card-body">
+                <h2 class="card-title">{{ (stats.openTickets / (stats.totalTickets > 0 ? stats.totalTickets : 1) * 100)|round }}%</h2>
+                <p class="card-text">Taux d'ouverture</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">📊 Répartition par statut</h5>
+            </div>
+            <div class="card-body">
+                {% if stats.byStatus is not empty %}
+                    {% for stat in stats.byStatus %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{ stat.statut }}</span>
+                            <span class="badge bg-secondary">{{ stat.nombre }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">Aucune donnée disponible</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">🏷️ Répartition par catégorie</h5>
+            </div>
+            <div class="card-body">
+                {% if stats.byCategory is not empty %}
+                    {% for stat in stats.byCategory %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>
+                                {% if stat.categorie == 'Incident' %}🚨
+                                {% elseif stat.categorie == 'Panne' %}⚠️
+                                {% elseif stat.categorie == 'Évolution' %}✨
+                                {% elseif stat.categorie == 'Anomalie' %}🐛
+                                {% else %}❓
+                                {% endif %}
+                                {{ stat.categorie }}
+                            </span>
+                            <span class="badge bg-secondary">{{ stat.nombre }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">Aucune donnée disponible</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">🏷️ Catégories</h6>
+            </div>
+            <div class="card-body text-center">
+                <p>Gérer les catégories de tickets</p>
+                <a href="{{ path('app_admin_categories') }}" class="btn btn-outline-primary">
+                    Gérer les catégories
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">📋 Statuts</h6>
+            </div>
+            <div class="card-body text-center">
+                <p>Gérer les statuts des tickets</p>
+                <a href="{{ path('app_admin_statuts') }}" class="btn btn-outline-primary">
+                    Gérer les statuts
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">👥 Utilisateurs</h6>
+            </div>
+            <div class="card-body text-center">
+                <p>Voir les utilisateurs système</p>
+                <a href="{{ path('app_admin_users') }}" class="btn btn-outline-primary">
+                    Voir les utilisateurs
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}l.twig' %}
+
 {% block title %}Hello AdminController!{% endblock %}
 
 {% block body %}
