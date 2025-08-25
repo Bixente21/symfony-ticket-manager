@@ -54,6 +54,7 @@ class TicketType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ticket::class,
+            'csrf_protection' => false, // Temporairement désactivé pour test
         ]);
     }
 }

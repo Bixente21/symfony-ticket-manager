@@ -33,7 +33,49 @@
                 </div>
                 <div class="card-body px-4 pb-4">
                 
-                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true, 'data-turbo': 'false'}}) }}
+                
+                <!-- DEBUG: Affichage des erreurs de formulaire -->
+                {% if form.vars.submitted %}
+                    <div class="alert alert-warning" role="alert">
+                        <strong>🔍 DEBUG: Formulaire soumis !</strong><br>
+                        Valide : {{ form.vars.valid ? 'OUI' : 'NON' }}<br>
+                        {% if not form.vars.valid %}
+                            Erreurs :
+                            {% for error in form.vars.errors %}
+                                <br>• {{ error.message }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+                <!-- Affichage des erreurs de champs -->
+                {% if form.auteur.vars.errors|length > 0 %}
+                    <div class="alert alert-danger">
+                        <strong>Erreur email :</strong>
+                        {% for error in form.auteur.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if form.description.vars.errors|length > 0 %}
+                    <div class="alert alert-danger">
+                        <strong>Erreur description :</strong>
+                        {% for error in form.description.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if form.categorie.vars.errors|length > 0 %}
+                    <div class="alert alert-danger">
+                        <strong>Erreur catégorie :</strong>
+                        {% for error in form.categorie.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
                     <div class="row g-4">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark">Votre adresse email *</label>
@@ -52,7 +94,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary btn-lg px-5'}, 'label': '📨 Envoyer ma demande'}) }}
+                                {{ form_widget(form.submit) }}
                             </div>
                         </div>
                     </div>

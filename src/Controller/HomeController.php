@@ -23,23 +23,31 @@ final class HomeController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Assigner le statut "Nouveau" par défaut
-            $statutNouveau = $statutRepository->findOneByName('Nouveau');
-            $ticket->setStatut($statutNouveau);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Assigner le statut "Nouveau" par défaut
+                $statutNouveau = $statutRepository->findOneByName('Nouveau');
+                if (!$statutNouveau) {
+                    $this->addFlash('error', '❌ Statut "Nouveau" introuvable !');
+                } else {
+                    $ticket->setStatut($statutNouveau);
 
-            // La date d'ouverture est automatiquement définie dans le constructeur
+                    $entityManager->persist($ticket);
+                    $entityManager->flush();
 
-            $entityManager->persist($ticket);
-            $entityManager->flush();
+                    // Générer un message avec le numéro de ticket
+                    $numeroTicket = 'TCK-' . str_pad($ticket->getId(), 6, '0', STR_PAD_LEFT);
 
-            // Générer un message avec le numéro de ticket
-            $numeroTicket = 'TCK-' . str_pad($ticket->getId(), 6, '0', STR_PAD_LEFT);
-            $this->addFlash('success', "✅ Votre ticket #{$numeroTicket} a été créé avec succès ! Vous recevrez une réponse dans les plus brefs délais à l'adresse : {$ticket->getAuteur()}");
+                    // Message de succès sans redirection pour test
+                    $this->addFlash('success', "🎉 TICKET CRÉÉ ! Votre ticket #{$numeroTicket} a été enregistré avec succès ! Vous recevrez une réponse à : {$ticket->getAuteur()}");
+                }
+            } else {
+                $this->addFlash('error', '❌ Formulaire invalide ! Vérifiez les erreurs ci-dessous.');
+            }
 
-            return $this->redirectToRoute('app_home');
+            // Pas de redirection pour le moment - on reste sur la même page
+            // return $this->redirectToRoute('app_home');
         }
-
         return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
             'ticket_created' => $form->isSubmitted() && $form->isValid(),
